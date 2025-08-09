@@ -1,7 +1,7 @@
 
 # littlecsv
 
-[![PyPi Version](https://img.shields.io/pypi/v/littlecsv.svg)](https://pypi.org/project/littlecsv/) [![License: GPL](https://img.shields.io/badge/License-GPL-green.svg)](https://opensource.org/licenses/GPL)
+[![PyPi Version](https://img.shields.io/pypi/v/littlecsv.svg)](https://pypi.org/project/littlecsv/) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 `littlecsv` is a simple, lightweight `pip` package for reading, writing, and managing CSV (.csv) files in Python.
 

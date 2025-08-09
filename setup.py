@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 # Setup ------------------------------------------------------------------------
 setup(
     name="littlecsv",
-    version="1.0.0",
+    version="1.0.1",
     author="Matsvei Tsishyn",
     author_email="matsvei.tsishyn@protonmail.com",
     description="Simple, light and little pip package to read, write and manage CSV files ('.csv') in Python.",
@@ -20,7 +20,7 @@ setup(
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     entry_points={
