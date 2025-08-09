@@ -1,0 +1,9 @@
+# Exclude files and directories that should not be in the package
+exclude 0_*
+exclude usage_example.py
+exclude data_sample.csv
+global-exclude *.py[cod]
+global-exclude __pycache__/*
+
+# Exclude build artifacts
+global-exclude *.egg-info/*

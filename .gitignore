@@ -1,0 +1,8 @@
+# Ignore cache build and config files
+__pycache__/
+build/
+dist/
+littlecsv.egg-info/
+
+# Ignore experiments
+0_*
