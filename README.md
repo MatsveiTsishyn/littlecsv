@@ -10,17 +10,6 @@
 - Never assumes a column or cell `type` unless explicitly specified (all cells are `str` by default)
 - Strict on format: no redundant columns in the header, and each line must have the same number of elements
 
-## Why ?
-
-I know it’s generally considered bad practice to avoid standard tools like `pandas`, however …
-The package could just as well be called `nopandas`.
-
-Everyone uses pandas, yet few truly understand what it’s doing under the hood. This encourages a “just push the magic button” R-style workflow that I personally dislike (or maybe I just don’t like reading the docs…).
-
-In contrast, here’s a pip package that almost no one uses (except me, sometimes) — but that anyone could understand. It’s a small, simple, and lightweight CSV/DataFrame manager that does no wild, hidden tricks — only clear, explicit manipulations.
-
-Of course, it’s less optimized than pandas code, but in my experience, the memory or computational bottleneck rarely lies in basic data manipulation.
-
 ## Installation and Usage
 
 Install with `pip`:
@@ -38,8 +27,26 @@ Here is a very brief usage example. For more, have a look to `./usage_example.py
 from littlecsv import CSV
 dataset = CSV.read("./data_sample.csv")
 dataset.rename_col("sec_str", "secondary structure")
+dataset.show()
 dataset.write("./data_sample_renamed.csv")
 ```
+
+## Why ?
+
+The package could just as well be called `nopandas`.
+I know it’s generally considered bad practice to avoid standard tools like `pandas`.
+
+However …
+Everyone uses pandas, yet few truly understand what it’s doing under the hood.
+Indeed, we often wonder 
+_"Did pandas just turn my integer ID columns into floats?"_ or
+_"Did my empty strings just get converted to None or NaN?"_ or also
+_"How does .groupby deal with missing values?"_.
+This encourages a “just push the magic button” R-style workflow that I personally dislike (or maybe I just don’t like reading the docs).
+
+In contrast, here’s a pip package that almost no one uses (except me, sometimes) — but that anyone could understand. It’s a small, simple, and lightweight CSV/DataFrame manager that does no wild, hidden tricks — only clear, explicit manipulations.
+
+Of course, it’s less optimized than pandas code, but in my experience, the memory or computational bottleneck rarely lies in basic data IO.
 
 ## Requirements
 

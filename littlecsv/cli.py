@@ -21,8 +21,8 @@ def show():
     )
 
     parser.add_argument(
-        "-s", "--sep", type=str, default=",", metavar="",
-        help="CSV separator",
+        "-s", "--sep", type=str, metavar="",
+        help="CSV separator (set 't' for TAB)",
     )
 
     parser.add_argument(
@@ -44,6 +44,17 @@ def show():
 
     # Execution ----------------------------------------------------------------
 
+    # Pre-Process arguments
+
+    # Define default separator
+    sep = args.sep
+    if sep is None:
+        sep = ","
+        if args.csv_path.endswith(".tsv"):
+            sep = "\t"
+    elif sep.lower() in ["\\t", "t", "tab", "\\tab"]:
+        sep = "\t"
+
     # Read and Show CSV
-    data = CSV.read(args.csv_path, sep=args.sep)
+    data = CSV.read(args.csv_path, sep=sep)
     data.show(n_entries=args.n_entries, max_col_length=args.max_col_length, max_line_length=args.max_line_length)

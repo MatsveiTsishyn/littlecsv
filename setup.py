@@ -1,6 +1,6 @@
 
 """
-WARNING: this 'setup.py' file is not used as PIP packages setup is now done from he 'pyproject.toml' file.
+WARNING: this 'setup.py' file is no more used as PIP packages setup is now done from the 'pyproject.toml' file.
 But I will just leave it here for compatibility with older pip versions (< 19).
 """
 
@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 # Setup ------------------------------------------------------------------------
 setup(
     name="littlecsv",
-    version="1.0.2",
+    version="1.0.3",
     author="Matsvei Tsishyn",
     author_email="matsvei.tsishyn@protonmail.com",
     description="Simple, light and little pip package to read, write and manage CSV files ('.csv') in Python.",

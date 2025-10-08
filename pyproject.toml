@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 # Pip Package Metadata ---------------------------------------------------------
 [project]
 name = "littlecsv"
-version = "1.0.2"
+version = "1.0.3"
 description = "Simple, light and little pip package to read, write and manage CSV files ('.csv') in Python."
 readme = "README.md"
 authors = [

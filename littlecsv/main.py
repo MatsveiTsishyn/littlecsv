@@ -375,10 +375,11 @@ class CSV:
 
         # Guardians
         assert any([output_path.endswith(f".{extention}")] for extention in self.ALLOWED_EXTENTIONS), f"{self._error_str}.write('{output_path}'): extention should be among {CSV.ALLOWED_EXTENTIONS})."
-        assert os.path.isdir(os.path.dirname(output_path)), f"{self._error_str}.write('{output_path}'): destination folder does not exists."
+        output_path_abs = os.path.abspath(output_path)
+        assert os.path.isdir(os.path.dirname(output_path_abs)), f"{self._error_str}.write('{output_path_abs}'): destination folder does not exists."
         
         # Stringity and write
-        with open(output_path, "w", newline="") as csvfile:
+        with open(output_path_abs, "w", newline="") as csvfile:
 
             # Init
             writer = csv.writer(csvfile, delimiter=self.sep)
