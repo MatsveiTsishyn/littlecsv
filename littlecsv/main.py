@@ -93,6 +93,23 @@ class CSV:
             output_csv.set_col_type(col_name, dtype, default_value=col_default_value)
 
         return output_csv
+    
+    @classmethod
+    def read_header(
+            cls,
+            input_path: str,
+            sep: str=",",
+        ) -> list[str]:
+        """Parse header from a CSV file and return list of header properties."""
+
+        # Guardians
+        assert os.path.isfile(input_path), f"{cls._error_str_class}: input_path='{input_path}' file does not exists."
+
+        # Parse header from file
+        with open(input_path, "r") as fs:
+            line = fs.readline()
+        csv_header_object = csv.reader([line], delimiter=sep)
+        return list(csv_header_object)[0]
 
     # Basic properties ---------------------------------------------------------
     @property
