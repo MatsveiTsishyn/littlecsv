@@ -138,6 +138,10 @@ class CSV:
         return self._header.properies()
 
     def __str__(self) -> str:
+        return f"CSV('{self.name}', n_rows={self.n_rows}, n_cols={self.n_cols})"
+    
+    @property
+    def _str_colored(self) -> str:
         return f"\033[92mCSV\033[0m('{self.name}', n_rows={self.n_rows}, n_cols={self.n_cols})"
     
     @property
@@ -315,7 +319,15 @@ class CSV:
         ]
         return new_csv
     
-    def show(self, n_entries: int=10, max_col_length: int=20, max_line_length: int=200, round_digit: int=4, sep: str=" | ") -> None:
+    def show(
+            self,
+            n_entries: int=10,
+            max_col_length: int=20,
+            max_line_length: int=200,
+            round_digit: int=4,
+            sep: str=" | ",
+            no_color: bool=False,
+        ) -> None:
 
         # Init
         dots = "..."
@@ -364,8 +376,11 @@ class CSV:
                 table[line_i] = line[0:len(columns_length_arr)-1] + [dots]
 
         # Show
-        print(self)
-        print(_format_line(table[0], columns_length_arr, sep, round_digit=round_digit, do_highlight=True))
+        if no_color:
+            print(str(self))
+        else:
+            print(self._str_colored)
+        print(_format_line(table[0], columns_length_arr, sep, round_digit=round_digit, do_highlight=not no_color))
         for line in table[1:]:
             print(_format_line(line, columns_length_arr, sep, round_digit=round_digit))
     
