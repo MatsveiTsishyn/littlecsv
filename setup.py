@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 # Setup ------------------------------------------------------------------------
 setup(
     name="littlecsv",
-    version="1.0.3",
+    version="1.0.4",
     author="Matsvei Tsishyn",
     author_email="matsvei.tsishyn@protonmail.com",
     description="Simple, light and little pip package to read, write and manage CSV files ('.csv') in Python.",
