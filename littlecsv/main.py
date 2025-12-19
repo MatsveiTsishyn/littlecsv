@@ -3,7 +3,7 @@
 # Imports ----------------------------------------------------------------------
 import os.path
 import csv
-from typing import Union, Tuple, List, Dict, Callable, Any
+from typing import Optional, Tuple, List, Dict, Callable, Any
 import numpy as np
 from littlecsv.header import Header
 from littlecsv.utils import _convert_to_type, _stringify, _format_line, _no_default
@@ -26,7 +26,7 @@ class CSV:
     # Constructor --------------------------------------------------------------
     def __init__(
             self,
-            header: List[str]=[],
+            header: Optional[List[str]]=None,
             sep: str=",",
             name: str="DataFrame",
             ignore_warnings: bool=False,
@@ -38,6 +38,8 @@ class CSV:
         self.ignore_warnings = ignore_warnings
 
         # Content
+        if header is None:
+            header: List[str] = []
         self._header = Header(header, sep)
         self.entries: List[dict] = []
 
@@ -46,10 +48,10 @@ class CSV:
             cls,
             input_path: str,
             sep: str=",",
-            name: Union[None, str]=None,
+            name: Optional[str]=None,
             ignore_warnings: bool=False,
-            col_types: Dict[str, type]={},
-            col_default: Dict[str, Any]={},
+            col_types: Optional[Dict[str, type]]=None,
+            col_default: Optional[Dict[str, Any]]=None,
         ) -> "CSV":
         """Read CSV object from a '.csv' file."""
 
@@ -88,6 +90,8 @@ class CSV:
             output_csv.entries.append({prop: value for prop, value in zip(header, line)})
 
         # Set column types if required
+        if col_types is None: col_types = {}
+        if col_default is None: col_default = {}
         for col_name, dtype in col_types.items():
             col_default_value = col_default.get(col_name, _no_default)
             output_csv.set_col_type(col_name, dtype, default_value=col_default_value)
@@ -246,7 +250,7 @@ class CSV:
         return self
     
     # Get Methods --------------------------------------------------------------
-    def get_col(self, property: str, dtype: Union[None, type]=None, default_value=_no_default, as_numpy: bool=False):
+    def get_col(self, property: str, dtype: Optional[type]=None, default_value=_no_default, as_numpy: bool=False):
         """Get a column of CSV as array."""
         assert property in self, f"{self._error_str}.get_array('{property}'): property does not exists."
         col_list = [entry[property] for entry in self.entries]
@@ -256,7 +260,7 @@ class CSV:
             col_list = np.array(col_list)
         return col_list
     
-    def get_row(self, id: int, dtype: Union[None, type]=None, default_value=_no_default, as_numpy: bool=False):
+    def get_row(self, id: int, dtype: Optional[type]=None, default_value=_no_default, as_numpy: bool=False):
         """Get Raw of CSV as array"""
         entry = self[id]
         row_list = [entry[p] for p in self._header]
@@ -289,7 +293,7 @@ class CSV:
         """Hash an entry (to string) by values of its hash_properties."""
         return sep.join([entry[prop] for prop in hash_properties])
 
-    def get_map(self, hash_properties: List[str], sep: str="_", map_function: Union[None, Callable]=None) -> Dict[str, Dict]:
+    def get_map(self, hash_properties: List[str], sep: str="_", map_function: Optional[Callable]=None) -> Dict[str, Dict]:
         """
         Obtain a map {hash(entry) -> entry} from CSV (redundencies not allowed).
             * if map_function is set, values of the map are defined as map_function(entry)
@@ -306,7 +310,7 @@ class CSV:
                 entries_map[h] = map_function(entry)
         return entries_map
 
-    def get_groups(self, hash_properties: List[str], sep: str="_", map_function: Union[None, Callable]=None) -> Dict[str, List[Dict]]:
+    def get_groups(self, hash_properties: List[str], sep: str="_", map_function: Optional[Callable]=None) -> Dict[str, List[Dict]]:
         """
         Obtain a map for groups {hash(entry) -> [entries_list]} from CSV.
             * if map_function is set, values of the map are defined as [map_function(entry), ...]
