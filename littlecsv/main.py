@@ -118,6 +118,34 @@ class CSV:
         csv_header_object = csv.reader([line], delimiter=sep)
         return list(csv_header_object)[0]
 
+    def __add__(
+            self,
+            other: "CSV",
+        ) -> "CSV":
+        """Concatenate entries from `self` and `other` and return joined CSV.
+            - new header is `self` header followed by `other` header properties that were not already in `self` header
+            - missing columns values are completed by an empty string ""
+        """
+
+        # Join headers
+        header1 = self.header()
+        header1_set = set(header1)
+        header = header1 + [k for k in other.header() if k not in header1_set]
+
+        # Create concatenated CSV
+        new_csv = CSV(
+            header,
+            sep=self.sep,
+            name=f"{self.name} + {other.name}",
+            ignore_warnings=self.ignore_warnings,
+        )
+
+        # Concatenate entries
+        for entry in self.entries + other.entries:
+            new_entry = {prop: entry.get(prop, "") for prop in header}
+            new_csv.add_entry(new_entry)
+        return new_csv
+
     # Basic properties ---------------------------------------------------------
     @property
     def sep(self) -> str:
@@ -250,6 +278,49 @@ class CSV:
         assert property_name in self._header, f"{self._error_str}.set_col_type(): property_name='{property_name}' does not exists."
         for entry in self.entries:
             entry[property_name] = _convert_to_type(entry[property_name], dtype, default_value)
+        return self
+
+    def concat_entries(
+            self,
+            other: "CSV",
+            allow_missing_properties: bool = False,
+            allow_new_properties: bool = False,
+            add_new_properties: bool = True,
+            default_value: Any = "",
+        ) -> "CSV":
+        """Add all entries from `other` to `self` and return `self`."""
+
+        # Guardians
+        header1 = self.header()
+        header1_set = set(header1)
+        header2 = other.header()
+        header2_set = set(header2)
+        if not allow_missing_properties:
+            for prop in header1:
+                if prop not in header2_set:
+                    raise ValueError(
+                        f"Header property '{prop}' from `self`={self} is missing in `other`={other}.\n"
+                        f" -> make sure `other` contains all `self` properties or set `allow_missing_properties=True`"
+                    )
+        if not allow_new_properties:
+            for prop in header2:
+                if prop not in header1_set:
+                    raise ValueError(
+                        f"Header property '{prop}' from `other`={other} is new with respect to `self`={self}.\n"
+                        f" -> make sure `other` contains not new properties with respect to `self` or set `allow_new_properties=True`"
+                    )
+
+        # Add new properties to header if needed
+        if add_new_properties:
+            for prop in header2:
+                if prop not in header1_set:
+                    self.add_empty_col(prop, default_value=default_value)
+
+        # Concatenate entries
+        header = self.header()
+        for entry in other.entries:
+            new_entry = {prop: entry.get(prop, default_value) for prop in header}
+            self.add_entry(new_entry)
         return self
     
     # Get Methods --------------------------------------------------------------
