@@ -4,6 +4,7 @@
 import os.path
 import csv
 from typing import Optional, Tuple, List, Dict, Callable, Any
+from pathlib import Path
 import numpy as np
 from littlecsv.header import Header
 from littlecsv.utils import _convert_to_type, _stringify, _format_line, _no_default
@@ -46,7 +47,7 @@ class CSV:
     @classmethod
     def read(
             cls,
-            input_path: str,
+            input_path: str | Path,
             sep: str=",",
             name: Optional[str]=None,
             ignore_warnings: bool=False,
@@ -56,6 +57,7 @@ class CSV:
         """Read CSV object from a '.csv' file."""
 
         # Guardians
+        input_path = str(input_path)
         assert any([input_path.endswith(f".{extention}")] for extention in cls.ALLOWED_EXTENTIONS), f"{cls._error_str_class}: extention sould be among {cls.ALLOWED_EXTENTIONS}."
         assert os.path.isfile(input_path), f"{cls._error_str_class}: input_path='{input_path}' file does not exists."
 
@@ -101,12 +103,13 @@ class CSV:
     @classmethod
     def read_header(
             cls,
-            input_path: str,
+            input_path: str | Path,
             sep: str=",",
         ) -> list[str]:
         """Parse header from a CSV file and return list of header properties."""
 
         # Guardians
+        input_path = str(input_path)
         assert os.path.isfile(input_path), f"{cls._error_str_class}: input_path='{input_path}' file does not exists."
 
         # Parse header from file
@@ -406,10 +409,11 @@ class CSV:
             print(_format_line(line, columns_length_arr, sep, round_digit=round_digit))
     
     # IO -----------------------------------------------------------------------
-    def write(self, output_path: str) -> "CSV":
+    def write(self, output_path: str | Path) -> "CSV":
         """Save CSV to a file at `output_path`."""
 
         # Guardians
+        output_path = str(output_path)
         assert any([output_path.endswith(f".{extention}")] for extention in self.ALLOWED_EXTENTIONS), f"{self._error_str}.write('{output_path}'): extention should be among {CSV.ALLOWED_EXTENTIONS})."
         output_path_abs = os.path.abspath(output_path)
         assert os.path.isdir(os.path.dirname(output_path_abs)), f"{self._error_str}.write('{output_path_abs}'): destination folder does not exists."
